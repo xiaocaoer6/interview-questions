@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript">
+// 闭包产生的条件有三个
+// 函数嵌套
+// 内层函数引用外层函数的变量
+// 使用外层函数内层函数被调用或者引用
+
+
+// this指向问题
+// 普通函数中this指向window,
+// 方法中this指向方法所在的对象
+// 构造函数中方法指向实例化对象
+// 事件回调函数中方法指向事件源
+    //代码片段一
+    let name = "The Window";
+    let object = {
+      name: "My Object",
+      getNameFunc: function () {
+        return function () {
+          return this.name; 
+        };
+      }
+    };
+    console.log(object.getNameFunc()());
+    
+    // 解析: 这里内层函数中并没有使外层函数中的变量,所以这不是闭包
+    // 这里的this是window
+
+
+    //代码片段二
+    let name2 = "The Window";
+    let object2 = {
+      name2: "My Object",
+      getNameFunc: function () {
+        let that = this;
+        return function () {
+          return that.name2;
+        };
+      }
+    };
+    console.log(object2.getNameFunc()(), '第二题');
+
+
+
+
+    //代码片段三
+    // log打印的是啥
+    function fun(n, o) {
+      console.log(o)
+      return {
+        fun: function (m) {
+          return fun(m, n)
+        }
+      }
+    }
+    let a = fun(0)
+    a.fun(1)
+    a.fun(2)
+    a.fun(3)
+    let b = fun(0).fun(1).fun(2).fun(3)
+    let c = fun(0).fun(1)
+    c.fun(2)
+    c.fun(3)
+
+    // undefined,a={fun:function(){}}
+    // m就是1,n是0
+    // 
+
+  </script>
+</body>
+
+</html>
